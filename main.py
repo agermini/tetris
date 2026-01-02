@@ -3,11 +3,10 @@ pygame.init()
 
 
 import matrix
-import pieces
 from pieces import Piece_factory
 from pieces import list_of_pieces
 
-list_of_pieces.append(Piece_factory.create(4, 0))
+list_of_pieces.append(Piece_factory.create())
 
 initial_width = 900
 initial_height = 900
@@ -23,6 +22,9 @@ fall_delay = slow_fall_delay
 fall_timer = 0
 
 current_piece = list_of_pieces[-1]
+
+stored = None
+lines_cleared = 0
 
 while running:
 
@@ -42,11 +44,28 @@ while running:
                 fall_delay = fast_fall_delay
             if event.key == pygame.K_SPACE:
                 current_piece.rotate(matrix.tetris_grid)
+            if event.key == pygame.K_UP and Piece_factory.can_hold:
+                if stored is None:
+                    current_piece.clear_piece(matrix.tetris_grid)
+                    stored = current_piece
+                    current_piece = Piece_factory.create()
+                else:
+                    current_piece.clear_piece(matrix.tetris_grid)
+                    temp = stored
+                    stored = current_piece
+                    current_piece = Piece_factory.create_copy(temp)
+                list_of_pieces[-1] = current_piece
+                Piece_factory.can_hold = False
+
         elif event.type == pygame.KEYUP:
             if event.key == pygame.K_DOWN:
                 fall_delay = slow_fall_delay
 
-    if fall_timer >= fall_delay:
+    speed = fall_delay - lines_cleared*10
+    if speed < 0:
+        speed = 0
+
+    if fall_timer >= speed:
         current_piece.fallingPiece(matrix.tetris_grid)
         fall_timer = 0
 

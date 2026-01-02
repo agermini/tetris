@@ -22,8 +22,10 @@ class piece:
     def fallingPiece(self, grid):
         if self.y == ROWS - 1 or self.collision_check_under(grid): 
             self.lock_in(grid)
-            clear_line(grid)
-            list_of_pieces.append(Piece_factory.create(4, 0))
+            Piece_factory.can_hold = True
+            import main
+            main.lines_cleared += clear_line(grid)
+            list_of_pieces.append(Piece_factory.create())
             return
         if self.y < ROWS - 1:
             self.clear_piece(grid)
@@ -180,8 +182,15 @@ class Piece_factory:
 
     COLORS = ['R', 'B', 'P', 'Y', 'G', 'C']
 
+    can_hold = True
+
     @staticmethod
-    def create(x, y):
+    def create():
         PieceClass = random.choice(Piece_factory.PIECES)
         color = random.choice(Piece_factory.COLORS)
-        return PieceClass(x, y, color)
+        return PieceClass(4, 0, color)
+    @staticmethod
+    def create_copy(piece: piece):
+        """Create a copy of a piece"""
+        return piece.__class__(4, 0, piece.color)
+        

@@ -84,10 +84,13 @@ def draw_grid(grid: list[list], surface: pygame.Surface):
         pygame.draw.rect(surface, trans_white, line, 0)
 
 def clear_line(grid: list[list]):
+    bool = False
     for i in range(len(grid)):
         if [] not in grid[i]:
             grid.pop(i)
             grid.insert(0, [[] for _ in range(COLS)])
+            bool = True
+    return bool
 
 
             
