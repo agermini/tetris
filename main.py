@@ -28,7 +28,7 @@ lines_cleared = 0
 
 pygame.mixer.init()
 pygame.mixer.music.load("tetris_theme.wav")
-#pygame.mixer.music.play(-1)
+pygame.mixer.music.play(-1)
 
 while running:
 
