@@ -26,6 +26,10 @@ current_piece = list_of_pieces[-1]
 stored = None
 lines_cleared = 0
 
+pygame.mixer.init()
+pygame.mixer.music.load("tetris_theme.wav")
+#pygame.mixer.music.play(-1)
+
 while running:
 
     dt = clock.get_time()
@@ -36,15 +40,15 @@ while running:
             running = False
 
         elif event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_LEFT:
+            if event.key == pygame.K_LEFT or event.key == pygame.K_a:
                 current_piece.move_left(matrix.tetris_grid)
-            if event.key == pygame.K_RIGHT:
+            if event.key == pygame.K_RIGHT or event.key == pygame.K_d:
                 current_piece.move_right(matrix.tetris_grid)
-            if event.key == pygame.K_DOWN:
+            if event.key == pygame.K_DOWN or event.key == pygame.K_s:
                 fall_delay = fast_fall_delay
             if event.key == pygame.K_SPACE:
                 current_piece.rotate(matrix.tetris_grid)
-            if event.key == pygame.K_UP and Piece_factory.can_hold:
+            if (event.key == pygame.K_UP or event.key == pygame.K_w) and Piece_factory.can_hold:
                 if stored is None:
                     current_piece.clear_piece(matrix.tetris_grid)
                     stored = current_piece
@@ -58,7 +62,7 @@ while running:
                 Piece_factory.can_hold = False
 
         elif event.type == pygame.KEYUP:
-            if event.key == pygame.K_DOWN:
+            if event.key == pygame.K_DOWN or event.key == pygame.K_s:
                 fall_delay = slow_fall_delay
 
     speed = fall_delay - lines_cleared*10
@@ -66,7 +70,7 @@ while running:
         speed = 0
 
     if fall_timer >= speed:
-        current_piece.fallingPiece(matrix.tetris_grid)
+        lines_cleared += current_piece.fallingPiece(matrix.tetris_grid)
         fall_timer = 0
 
     screen.fill('black')

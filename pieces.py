@@ -13,24 +13,23 @@ import random
 list_of_pieces = []
 
 class piece:
-    def __init__(self, x: int, y: int, color: str):
+    def __init__(self, x: int, y: int):
         """color is represented as a single uppercase character. ex: blue is "B" """
         self.x = x
         self.y = y
-        self.color = color
 
     def fallingPiece(self, grid):
         if self.y == ROWS - 1 or self.collision_check_under(grid): 
             self.lock_in(grid)
             Piece_factory.can_hold = True
-            import main
-            main.lines_cleared += clear_line(grid)
+            lines_cleared = clear_line(grid)
             list_of_pieces.append(Piece_factory.create())
-            return
+            return lines_cleared
         if self.y < ROWS - 1:
             self.clear_piece(grid)
             self.y += 1
             self.draw_piece(grid)
+        return 0
 
     def lock_in(self, grid):
         for cx, cy in self.get_cells():
@@ -138,8 +137,9 @@ class piece:
 
 class O_block(piece):
 
-    def __init__(self, x, y, color):
-        super().__init__(x, y, color)
+    def __init__(self, x, y):
+        super().__init__(x, y)
+        self.color = "Y"
         self.blocks = [(0,0), (1,0), (0,-1), (1,-1)]
 
     def rotate(self, grid):
@@ -147,33 +147,39 @@ class O_block(piece):
     
 class I_block(piece):
 
-    def __init__(self, x, y, color):
-        super().__init__(x, y, color)
+    def __init__(self, x, y):
+        super().__init__(x, y)
+        self.color = "C"
         self.blocks = [(0,0), (-1,0), (1,0), (2,0)]
 
 class L_block(piece):
-    def __init__(self, x, y, color):
-        super().__init__(x, y, color)
+    def __init__(self, x, y):
+        super().__init__(x, y)
+        self.color = "O"
         self.blocks = [(0,0), (1,0), (0,-1), (0,-2)]
 
 class J_block(piece):
-    def __init__(self, x, y, color):
-        super().__init__(x, y, color)
+    def __init__(self, x, y):
+        super().__init__(x, y)
+        self.color = "Pi"
         self.blocks = [(0,0), (-1,0), (0,-1), (0,-2)]
     
 class T_block(piece):
-    def __init__(self, x, y, color):
-        super().__init__(x, y, color)
+    def __init__(self, x, y):
+        super().__init__(x, y)
+        self.color = "Pu"
         self.blocks = [(0,0), (-1,0), (1,0), (0,-1)]
 
 class S_block(piece):
-    def __init__(self, x, y, color):
-        super().__init__(x, y, color)
+    def __init__(self, x, y):
+        super().__init__(x, y)
+        self.color = "R"
         self.blocks = [(0,0), (-1,0),(0,-1),(1,-1)]
 
 class Z_block(piece):
-    def __init__(self, x, y, color):
-        super().__init__(x, y, color)
+    def __init__(self, x, y):
+        super().__init__(x, y)
+        self.color = "G"
         self.blocks = [(0,0), (1,0),(0,-1),(-1,-1)]
 
 class Piece_factory:
@@ -186,11 +192,11 @@ class Piece_factory:
 
     @staticmethod
     def create():
+        """create randomized piece"""
         PieceClass = random.choice(Piece_factory.PIECES)
-        color = random.choice(Piece_factory.COLORS)
-        return PieceClass(4, 0, color)
+        return PieceClass(4, 0)
     @staticmethod
     def create_copy(piece: piece):
         """Create a copy of a piece"""
-        return piece.__class__(4, 0, piece.color)
+        return piece.__class__(4, 0)
         

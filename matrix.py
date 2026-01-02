@@ -1,11 +1,12 @@
 import pygame
 
 red = ['R']
-blue = ['B']
-purple = ['P']
+purple = ['Pu']
+pink = ['Pi']
 yellow = ['Y']
 green = ['G']
 cyan = ['C']
+orange = ['O']
 
 trans_white = pygame.Color(255, 255, 255, 150)
 
@@ -55,8 +56,8 @@ def draw_grid(grid: list[list], surface: pygame.Surface):
                 continue
             if square == red:
                 pygame.draw.rect(surface, 'red', rect, 0)
-            if square == blue:
-                pygame.draw.rect(surface, 'blue', rect, 0)
+            if square == pink:
+                pygame.draw.rect(surface, 'pink', rect, 0)
             if square == purple:
                 pygame.draw.rect(surface, 'purple', rect, 0)
             if square == yellow:
@@ -65,6 +66,8 @@ def draw_grid(grid: list[list], surface: pygame.Surface):
                 pygame.draw.rect(surface, 'green', rect, 0)
             if square == cyan:
                 pygame.draw.rect(surface, 'cyan', rect, 0)
+            if square == orange:
+                pygame.draw.rect(surface, 'orange', rect, 0)
 
     ### Draw grid lines
     for row in range(ROWS + 1):
