@@ -7,10 +7,12 @@ O = [[[], []],
 """
 
 import pygame
-from matrix import ROWS, COLS, clear_line
+from matrix import ROWS, COLS
 import random
+import sys
 
 list_of_pieces = []
+score = 0
 
 class piece:
     def __init__(self, x: int, y: int):
@@ -35,7 +37,12 @@ class piece:
         for cx, cy in self.get_cells():
             if 0 <= cy < ROWS and 0 <= cx < COLS:
                 grid[cy][cx] = [self.color]
-
+        top_row = grid[0]
+        for cell in top_row:
+            if cell != []:
+                pygame.quit()
+                sys.exit()
+            
     def get_cells(self):
         return [(self.x + dx, self.y + dy) for dx, dy in self.blocks]
 
@@ -133,8 +140,27 @@ class piece:
             elif grid[test_cell[1]][test_cell[0]] != []:
                 return True
         return False
-                
+    
+def clear_line(grid: list[list]):
+    bool = False
+    for i in range(len(grid)):
+        if [] not in grid[i]:
+            grid.pop(i)
+            grid.insert(0, [[] for _ in range(COLS)])
+            bool = True
+            global score
+            score += 10
+            update_highscore()
+    return bool
 
+def update_highscore():
+    with open ("./highscore.txt", "r") as file:
+        lines = file.readlines()
+        highscore = int(lines[0])
+    with open ("./highscore.txt", "w") as file:
+        if score > highscore:
+            file.write(str(score))
+            
 class O_block(piece):
 
     def __init__(self, x, y):
